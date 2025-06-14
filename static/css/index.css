@@ -17,6 +17,10 @@ svg:not([fill="none"]) {
    fill: currentColor;
 }
 
+a+div:empty {
+   display: none;
+}
+
 button {
    cursor: pointer;
 }
