@@ -1,26 +1,37 @@
 from flask import Flask
-from reactpy import html, component
+from reactpy import html, component, use_state
 from reactpy.backend.flask import configure, Options
 from reactpy_router import browser_router, route
-from vistas.index import Inicio
-from vistas._404 import NoEncontrado
-from flaskwebgui import FlaskUI # type: ignore
 
+from vistas.formulario import Formulario
+from vistas._404 import NoEncontrado
 from vistas.login import Login
-from vistas.registro import Registro # type: ignore
+from vistas.registro import Registro
+
+from flaskwebgui import FlaskUI  # type: ignore
 
 app = Flask(__name__)
 
 # Raíz con las rutas de la aplicación
 @component
 def root():
+    autenticado, set_autenticado = use_state(False)
+
+    # si no ha iniciado sesión, se redirige siempre al login
+    if not autenticado:
+        return browser_router(
+            route("/registro", Registro(set_autenticado)),
+            route("{404:any}", Login(set_autenticado)),
+        )
+
+    # si ha iniciado sesión, se activan todas las rutas de la aplicación, menos el login
     return browser_router(
-        route("/", Inicio()),
-        route("/registro", Registro()),
-        route("/login", Login()),
+        route("/", Formulario()),
+        route("/registros", Registros()),
         route("{404:any}", NoEncontrado()),
     )
-    
+
+
 # Configuración de la aplicación para su funcionamiento
 configure(
     # instancia de la aplicación de Flask
