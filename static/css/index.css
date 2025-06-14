@@ -1,0 +1,33 @@
+/* @import url('./tailwind.reset.css'); */
+@import url('./fuente.css');
+
+html,
+body,
+#app {
+   height: 100%;
+}
+
+svg {
+   height: var(--s, 1em);
+   width: var(--s, 1em);
+   stroke: currentColor;
+}
+
+svg:not([fill="none"]) {
+   fill: currentColor;
+}
+
+button {
+   cursor: pointer;
+}
+
+html {
+   background: #000;
+   --c1: hsl(0, 0%, 96%);
+   --c2: hsl(0, 0%, 92%);
+
+   background: linear-gradient(-45deg, var(--c1) 20%, transparent 20% 80%, var(--c1) 80% 100%), linear-gradient(45deg, var(--c1) 20%, transparent 20% 80%, var(--c1) 80% 100%), linear-gradient(-45deg, #ffffff 33%, transparent 33% 66%, #ffffff 66%), linear-gradient(45deg, transparent 33%, var(--c2) 33% 66%, transparent 66%);
+      background-size: 3em 3em;
+      background-color: #ffffff;
+      opacity: 1
+}
