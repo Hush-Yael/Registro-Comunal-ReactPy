@@ -19,12 +19,18 @@ html {
 }
 
 svg {
-   height: var(--s, 1em);
-   width: var(--s, 1em);
+   display: inline-block;
+}
+
+svg:not([stroke-width]) {
+   stroke-width: 0;
+}
+
+svg:not([stroke]) {
    stroke: currentColor;
 }
 
-svg:not([fill="none"]) {
+svg:not([fill]) {
    fill: currentColor;
 }
 
