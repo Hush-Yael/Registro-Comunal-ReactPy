@@ -81,6 +81,16 @@ button:disabled {
    background-color: hsl(0, 100%, 40%);
 }
 
+@keyframes aparecer {
+   from {
+      opacity: 0;
+   }
+
+   to {
+      opacity: 1;
+   }
+}
+
 .carga {
    --speed: .8s;
    --bg-opacity: 0.1;
