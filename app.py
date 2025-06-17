@@ -28,6 +28,8 @@ def root():
     # si ha iniciado sesión, se activan todas las rutas de la aplicación, menos el login
     return browser_router(
         route("/", Formulario()),
+        route("/login", navigate("/", replace=True)),
+        route("/registro", navigate("/", replace=True)),
         route("/registros", Registros()),
         route("{404:any}", NoEncontrado()),
     )
