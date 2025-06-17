@@ -22,6 +22,14 @@ svg {
    display: inline-block;
 }
 
+svg:not([width]):not([class]) {
+   width: 1.25em;
+}
+
+svg:not([height]):not([class]) {
+   height: 1.25em;
+}
+
 svg:not([stroke-width]) {
    stroke-width: 0;
 }
