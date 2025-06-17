@@ -1,8 +1,9 @@
 from flask import Flask
 from reactpy import html, component, use_state
 from reactpy.backend.flask import configure, Options
-from reactpy_router import browser_router, route
+from reactpy_router import browser_router, route, navigate
 
+from constantes.db import Sesion
 from vistas.formulario import Formulario
 from vistas._404 import NoEncontrado
 from vistas.login import Login
@@ -16,13 +17,14 @@ app = Flask(__name__)
 # Raíz con las rutas de la aplicación
 @component
 def root():
-    autenticado, set_autenticado = use_state(False)
+    _sesion: Sesion = {"usuario": "", "rol": ""}
+    sesion, set_sesion = use_state(_sesion)
 
     # si no ha iniciado sesión, se redirige siempre al login
-    if not autenticado:
+    if not sesion["usuario"]:
         return browser_router(
             route("/registro", Registro()),
-            route("{404:any}", Login(set_autenticado)),
+            route("{404:any}", Login(set_sesion)),
         )
 
     # si ha iniciado sesión, se activan todas las rutas de la aplicación, menos el login

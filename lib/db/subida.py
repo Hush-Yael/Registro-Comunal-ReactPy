@@ -56,7 +56,7 @@ async def registrar_usuario(datos: DatosUsuario):
         await conn.close()
 
 
-async def iniciar_sesion(datos: DatosUsuario):
+async def iniciar_sesion(datos: DatosUsuario) -> str:
     conn, cursor = await abrir_db()
 
     datos_db = (
@@ -87,4 +87,4 @@ async def iniciar_sesion(datos: DatosUsuario):
             }
         )
 
-    return datos_db
+    return datos_db[1]

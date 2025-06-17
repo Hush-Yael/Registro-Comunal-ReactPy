@@ -4,6 +4,7 @@ from reactpy_router import link, navigate
 
 from lib.db.subida import iniciar_sesion
 from constantes.db import (
+    Sesion,
     NOMBRE_MÍNIMO,
     CONTRASEÑA_MÍNIMA,
     DatosUsuario,
@@ -17,7 +18,7 @@ from .componentes.contenedor import Contenedor, Cabecera
 
 
 @component
-def Login(set_autenticado: Callable[[bool], None]):
+def Login(set_sesion: Callable[[Sesion], None]):
     datos_iniciales: DatosUsuario = {"nombre": "", "contraseña": ""}
     datos, set_datos = use_state(datos_iniciales)
 
@@ -29,8 +30,8 @@ def Login(set_autenticado: Callable[[bool], None]):
     async def subir(_):
         set_respuesta({"estado": "subiendo", "error": {"mensaje": "", "motivo": ""}})
         try:
-            await iniciar_sesion(datos)
-            set_autenticado(True)
+            rol = await iniciar_sesion(datos)
+            set_sesion({"usuario": datos["nombre"], "rol": rol})
             set_respuesta({"estado": "éxito"})
         except ErrorDeValidacion as e:
             datos_error = e.args[0]

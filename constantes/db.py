@@ -12,3 +12,8 @@ class DatosUsuario(TypedDict):
 class ErrorDeValidacion(Exception):
     motivo: str
     mensaje: str
+
+
+class Sesion(TypedDict):
+    usuario: str
+    rol: str
