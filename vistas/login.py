@@ -13,8 +13,9 @@ from constantes.db import (
 
 from .componentes.alerta import Alerta
 from .componentes.main import Main
-from .componentes.formulario.input import Input
 from .componentes.contenedor import Contenedor, Cabecera
+from .componentes.formulario.input import Input
+from .componentes.formulario.contraseña import Contraseña
 
 
 @component
@@ -68,8 +69,7 @@ def Login(set_sesion: Callable[[Sesion], None]):
                         ),
                     },
                 ),
-                Input(
-                    label="Ingrese la contraseña",
+                Contraseña(
                     error=respuesta["error"]["mensaje"]  # type: ignore
                     if respuesta["error"]["motivo"]  # type: ignore
                     == "contraseña-incorrecta"
