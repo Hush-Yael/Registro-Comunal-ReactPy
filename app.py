@@ -12,6 +12,7 @@ from flaskwebgui import FlaskUI  # type: ignore
 
 app = Flask(__name__)
 
+
 # Raíz con las rutas de la aplicación
 @component
 def root():
@@ -20,7 +21,7 @@ def root():
     # si no ha iniciado sesión, se redirige siempre al login
     if not autenticado:
         return browser_router(
-            route("/registro", Registro(set_autenticado)),
+            route("/registro", Registro()),
             route("{404:any}", Login(set_autenticado)),
         )
 
