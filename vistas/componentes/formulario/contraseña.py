@@ -33,12 +33,12 @@ def Contraseña(
             ),
             html.button(
                 {
-                    "className": "absolute right-1 top-[3px]",
+                    "className": "absolute right-1 top-[2px]",
                     "type": "button",
                     "aria-label": f"{'ocultar' if visible else 'mostrar'} contraseña",
                     "onClick": event(lambda _: set_visible(not visible)),
                 },
-                Iconos.Ocultar({"className": "size-[1.125em]"})
+                Iconos.Ocultar({"className": "size-[1em]"})
                 if visible
                 else Iconos.Ver({"className": "size-[1.125em]"}),
             ),
