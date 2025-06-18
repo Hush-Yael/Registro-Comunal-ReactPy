@@ -1,12 +1,19 @@
-from reactpy import component, html, use_context, use_effect, use_state
+from reactpy import (
+    component,
+    html,
+    use_context,
+    use_effect,
+    use_state,
+    use_ref,
+)
 from reactpy_router import link
-from typing import Any, Callable
+from typing import Callable
 
 from lib.db.obtencion import obtener_usuarios
 from lib.db.modificacion import cambiar_rol, eliminar_usuario
 from constantes.db import Sesion
 from contexto.sesion import contexto_sesion
-
+from contexto.eliminar_usuario import contexto_eliminar_usuario
 
 from .componentes.terminar_sesion import TerminarSesion
 from .componentes.carga import Carga
@@ -14,48 +21,85 @@ from .componentes.tabla import Fila, Tabla
 from .componentes.contenedor import Contenedor, Cabecera
 from .componentes.main import Main
 from .componentes.iconos import Iconos
+from .componentes.modal import Modal
 
 
 @component
 def Usuarios():
-    return Main(
-        Contenedor(
-            Cabecera(
-                "Lista de usuarios",
-                html.div(
-                    {"className": "flex flex-col gap-2"},
-                    link(
-                        {"to": "/", "class_name": "btn btn-primario"},
-                        Iconos.FlechaAtras(),
-                        "Ir al formulario",
+    abierto, set_abierto = use_state(False)
+    usuarios, set_usuarios = use_state([])
+    usuario_a_eliminar = use_ref("")
+
+    async def eliminar(_):
+        nombre = usuario_a_eliminar.current
+        await eliminar_usuario(nombre)
+        set_usuarios(
+            lambda anteriores: list(
+                filter(lambda u: u["usuario"] != nombre, anteriores)
+            )
+        )
+        usuario_a_eliminar.current = ""
+
+    return contexto_eliminar_usuario(
+        Main(
+            Contenedor(
+                Cabecera(
+                    "Lista de usuarios",
+                    html.div(
+                        {"className": "flex flex-col gap-2"},
+                        link(
+                            {"to": "/", "class_name": "btn btn-primario"},
+                            Iconos.FlechaAtras(),
+                            "Ir al formulario",
+                        ),
+                        TerminarSesion(),
                     ),
-                    TerminarSesion(),
+                ),
+                Tabla(
+                    [
+                        {"label": "#", "tamaño": 3},
+                        {"label": "Usuario", "tamaño": 25},
+                        {"label": "Rol", "tamaño": 5},
+                        {"label": "Acciones", "tamaño": 15, "pos": "right"},
+                    ],
+                    Datos(usuarios, set_usuarios),
+                ),
+            )
+        ),
+        Modal(
+            html.div(
+                {"className": "flex flex-col gap-2"},
+                html.h1({"className": "font-bold"}, "Eliminar usuario"),
+                html.p(
+                    {"className": "text-neutral-500"},
+                    "¿Realmente quieres eliminar el usuario?",
                 ),
             ),
-            Tabla(
-                [
-                    {"label": "#", "tamaño": 3},
-                    {"label": "Usuario", "tamaño": 25},
-                    {"label": "Rol", "tamaño": 5},
-                    {"label": "Acciones", "tamaño": 15, "pos": "right"},
-                ],
-                Datos(),
-            ),
-        )
+            abierto=abierto,
+            set_abierto=set_abierto,
+            confirmar=eliminar,
+            confirmar_txt="Eliminar",
+        ),
+        value={
+            "abierto": abierto,
+            "set_abierto": set_abierto,
+            "usuario": usuario_a_eliminar,
+        },
     )
 
 
-def Datos():
-    contexto = use_context(contexto_sesion)
-    sesion = contexto["sesion"]
+def Datos(
+    usuarios: list[Sesion] = [],
+    set_usuarios: Callable[[Callable[[list[Sesion]], list[Sesion]]], None] = None,  # type: ignore
+):
+    sesion = use_context(contexto_sesion)["sesion"]
 
     ADMIN = sesion["rol"] == "admin"
 
     cargado, set_cargado = use_state(False)
-    usuarios, set_usuarios = use_state([])
 
     async def obtencion():
-        set_usuarios(await obtener_usuarios())
+        set_usuarios(await obtener_usuarios())  # type: ignore
         set_cargado(True)
 
     # carga de usuarios
@@ -95,7 +139,7 @@ def Datos():
             ),
             html.td(
                 {"className": "p-2 text-right"},
-                BtnEliminar(usuarios[i]["usuario"], set_usuarios)
+                BtnEliminar(usuarios[i]["usuario"])
                 if not es_usuario_actual(usuarios[i]["usuario"])
                 else html.i(
                     {
@@ -124,20 +168,19 @@ def Roles(func: Callable, datos: Sesion):
     )
 
 
-def BtnEliminar(usuario: str, set_usuarios: Callable[[Any], None]):
-    contexto = use_context(contexto_sesion)
-    sesion = contexto["sesion"]
+def BtnEliminar(usuario: str):
+    contexto = use_context(contexto_eliminar_usuario)
+    set_abierto = contexto["set_abierto"]
+    usuario_a_eliminar = contexto["usuario"]
+
+    sesion = use_context(contexto_sesion)["sesion"]
 
     async def eliminar(_):
         if sesion["rol"] != "admin":
             return
 
-        await eliminar_usuario(usuario)
-        set_usuarios(
-            lambda anteriores: list(
-                filter(lambda u: u["usuario"] != usuario, anteriores)
-            )
-        )
+        set_abierto(True)
+        usuario_a_eliminar.current = usuario
 
     return html.button(
         {
