@@ -129,6 +129,9 @@ def BtnEliminar(usuario: str, set_usuarios: Callable[[Any], None]):
     sesion = contexto["sesion"]
 
     async def eliminar(_):
+        if sesion["rol"] != "admin":
+            return
+
         await eliminar_usuario(usuario)
         set_usuarios(
             lambda anteriores: list(
