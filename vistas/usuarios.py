@@ -125,6 +125,9 @@ def Roles(func: Callable, datos: Sesion):
 
 
 def BtnEliminar(usuario: str, set_usuarios: Callable[[Any], None]):
+    contexto = use_context(contexto_sesion)
+    sesion = contexto["sesion"]
+
     async def eliminar(_):
         await eliminar_usuario(usuario)
         set_usuarios(
@@ -137,6 +140,7 @@ def BtnEliminar(usuario: str, set_usuarios: Callable[[Any], None]):
         {
             "className": "btn btn-peligro ml-auto px-1.25!",
             "on_click": eliminar,
+            "disabled": sesion["rol"] != "admin",
         },
         Iconos.Eliminar(),
     )
