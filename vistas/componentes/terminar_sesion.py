@@ -1,12 +1,13 @@
-from reactpy import component, html
-from typing import Callable
+from reactpy import component, html, use_context
+from contexto.sesion import contexto_sesion
 
-from constantes.db import Sesion
 from ..componentes.iconos import Iconos
 
 
 @component
-def TerminarSesion(set_sesion: Callable[[Sesion], None]):
+def TerminarSesion():
+    set_sesion = use_context(contexto_sesion)["set_sesion"]
+
     return html.button(
         {
             "className": "btn btn-secundario",

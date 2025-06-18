@@ -1,15 +1,15 @@
-from typing import Callable
-from reactpy import component, html, event, use_state
+from reactpy import component, html, event, use_context, use_state
 from reactpy_router import link, navigate
 
 from lib.db.subida import iniciar_sesion
 from constantes.db import (
-    Sesion,
     NOMBRE_MÍNIMO,
     CONTRASEÑA_MÍNIMA,
     DatosUsuario,
     ErrorDeValidacion,
 )
+from contexto.sesion import contexto_sesion
+
 
 from .componentes.alerta import Alerta
 from .componentes.main import Main
@@ -19,7 +19,9 @@ from .componentes.formulario.contraseña import Contraseña
 
 
 @component
-def Login(set_sesion: Callable[[Sesion], None]):
+def Login():
+    set_sesion = use_context(contexto_sesion)["set_sesion"]
+
     datos_iniciales: DatosUsuario = {"nombre": "", "contraseña": ""}
     datos, set_datos = use_state(datos_iniciales)
 

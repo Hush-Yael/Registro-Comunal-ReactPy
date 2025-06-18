@@ -1,10 +1,12 @@
-from reactpy import component, html, use_effect, use_state
+from reactpy import component, html, use_context, use_effect, use_state
 from reactpy_router import link
 from typing import Any, Callable
 
 from lib.db.obtencion import obtener_usuarios
 from lib.db.modificacion import cambiar_rol, eliminar_usuario
 from constantes.db import Sesion
+from contexto.sesion import contexto_sesion
+
 
 from .componentes.terminar_sesion import TerminarSesion
 from .componentes.carga import Carga
@@ -15,7 +17,7 @@ from .componentes.iconos import Iconos
 
 
 @component
-def Usuarios(sesion: Sesion, set_sesion: Callable[[Sesion], None]):
+def Usuarios():
     return Main(
         Contenedor(
             Cabecera(
@@ -27,7 +29,7 @@ def Usuarios(sesion: Sesion, set_sesion: Callable[[Sesion], None]):
                         Iconos.FlechaAtras(),
                         "Ir al formulario",
                     ),
-                    TerminarSesion(set_sesion),
+                    TerminarSesion(),
                 ),
             ),
             Tabla(
@@ -37,13 +39,16 @@ def Usuarios(sesion: Sesion, set_sesion: Callable[[Sesion], None]):
                     {"label": "Rol", "tamaño": 5},
                     {"label": "Acciones", "tamaño": 15, "pos": "right"},
                 ],
-                Datos(sesion),
+                Datos(),
             ),
         )
     )
 
 
-def Datos(sesion: Sesion):
+def Datos():
+    contexto = use_context(contexto_sesion)
+    sesion = contexto["sesion"]
+
     ADMIN = sesion["rol"] == "admin"
 
     cargado, set_cargado = use_state(False)

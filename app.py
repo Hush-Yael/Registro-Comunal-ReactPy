@@ -2,12 +2,14 @@ from flask import Flask
 from reactpy import html, component, use_state
 from reactpy.backend.flask import configure, Options
 from reactpy_router import browser_router, route, navigate
+from contexto.sesion import contexto_sesion
 
 from constantes.db import Sesion
 from vistas.formulario import Formulario
 from vistas._404 import NoEncontrado
 from vistas.login import Login
 from vistas.registro import Registro
+from vistas.usuarios import Usuarios
 
 from flaskwebgui import FlaskUI  # type: ignore
 
@@ -22,19 +24,25 @@ def root():
 
     # si no ha iniciado sesión, se redirige siempre al login
     if not sesion["usuario"]:
-        return browser_router(
-            route("/registro", Registro()),
-            route("{404:any}", Login(set_sesion)),
+        return contexto_sesion(
+            browser_router(
+                route("/registro", Registro()),
+                route("{404:any}", Login()),
+            ),
+            value={"sesion": sesion, "set_sesion": set_sesion},
         )
 
     # si ha iniciado sesión, se activan todas las rutas de la aplicación, menos el login
-    return browser_router(
-        route("/", Formulario()),
-        route("/login", navigate("/", replace=True)),
-        route("/registro", navigate("/", replace=True)),
-        route("/usuarios", Usuarios(sesion, set_sesion)),
-        route("/registros", Registros()),
-        route("{404:any}", NoEncontrado()),
+    return contexto_sesion(
+        browser_router(
+            route("/", Formulario()),
+            route("/login", navigate("/", replace=True)),
+            route("/registro", navigate("/", replace=True)),
+            route("/usuarios", Usuarios()),
+            route("/registros", Registros()),
+            route("{404:any}", NoEncontrado()),
+        ),
+        value={"sesion": sesion, "set_sesion": set_sesion},
     )
 
 
