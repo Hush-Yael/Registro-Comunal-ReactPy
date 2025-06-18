@@ -32,6 +32,7 @@ def root():
         route("/", Formulario()),
         route("/login", navigate("/", replace=True)),
         route("/registro", navigate("/", replace=True)),
+        route("/usuarios", Usuarios(sesion, set_sesion)),
         route("/registros", Registros()),
         route("{404:any}", NoEncontrado()),
     )
