@@ -285,3 +285,22 @@ class Iconos:
             svg.path({"d": "M17 12h.01"}),
             svg.path({"d": "M13 12h.01"}),
         )
+
+    @component
+    def Borrar(p: VdomDict = {}):  # type: ignore
+        return html.svg(
+            {
+                "viewBox": "0 0 24 24",
+                "fill": "none",
+                "stroke-width": "2",
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round",
+            },
+            svg.path({"stroke": "none", "d": "M0 0h24v24H0z", "fill": "none"}),
+            svg.path(
+                {
+                    "d": "M19 20h-10.5l-4.21 -4.3a1 1 0 0 1 0 -1.41l10 -10a1 1 0 0 1 1.41 0l5 5a1 1 0 0 1 0 1.41l-9.2 9.3"
+                }
+            ),
+            svg.path({"d": "M18 13.3l-6.3 -6.3"}),
+        )

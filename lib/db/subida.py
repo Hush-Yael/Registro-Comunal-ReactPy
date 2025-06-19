@@ -1,4 +1,4 @@
-from constantes.db import DatosUsuario, ErrorDeValidacion
+from constantes.db import DatosComunidad, DatosUsuario, ErrorDeValidacion
 from lib.db.apertura import abrir_db
 
 ERROR_UNICO = "UNIQUE constraint failed"
@@ -94,3 +94,84 @@ async def iniciar_sesion(datos: DatosUsuario) -> str:
         )
 
     return datos_db[1]
+
+
+async def verificar_cedula_existente(cedula: int):
+    conn, cursor = await abrir_db()
+
+    cedula_db = (
+        await (
+            await cursor.execute(
+                "SELECT cedula FROM comunidad WHERE cedula = ? LIMIT 1",
+                (cedula,),
+            )
+        ).fetchone()
+        or ()
+    )
+
+    await conn.close()
+
+    if len(cedula_db) > 0:
+        raise ErrorDeValidacion(
+            {
+                "motivo": "cedula-ya-existente",
+                "mensaje": "Ya existe un registro con esa cédula",
+            }
+        )
+
+
+async def añadir_datos_comunidad(datos: DatosComunidad):
+    conn, cursor = await abrir_db()
+
+    try:
+        await cursor.execute(
+            "INSERT INTO comunidad (nombres, apellidos, cedula, fecha_nacimiento, patologia, numero_casa) VALUES (?, ?, ?, ?, ?, ?)",
+            (
+                datos["nombres"],
+                datos["apellidos"],
+                datos["cedula"],
+                datos["fecha_nacimiento"],
+                datos["patologia"],
+                datos["numero_casa"],
+            ),
+        )
+        await conn.commit()
+    except Exception as e:
+        error = e.args[0]
+
+        # el único campo único es la cédula
+        if ERROR_UNICO in error:
+            raise ErrorDeValidacion(
+                {
+                    "motivo": "cedula-ya-existente",
+                    "mensaje": "Ya existe un registro con esa cédula",
+                }
+            )
+
+        # errores de integridad de datos
+        elif ERROR_DE_VERIFICACIÓN in error:
+            if "nombre" in error or "apellidos" in error:
+                str = "nombres" if "nombre" in error else "apellidos"
+
+                raise ErrorDeValidacion(
+                    {
+                        "motivo": str + "-cortos",
+                        "mensaje": f"Los {str} deben tener al menos 3 caracteres, sin espacios a los lados",
+                    }
+                )
+            elif "cedula" in error:
+                raise ErrorDeValidacion(
+                    {
+                        "motivo": "cedula-corta",
+                        "mensaje": "La cédula debe ser mayor a 0",
+                    }
+                )
+            # error desconocido, no debería pasar
+            else:
+                raise e
+        # error desconocido, no debería pasar
+        else:
+            raise e
+        return
+    finally:
+        await conn.close()

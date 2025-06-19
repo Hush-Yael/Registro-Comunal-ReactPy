@@ -9,6 +9,15 @@ class DatosUsuario(TypedDict):
     contraseña: str
 
 
+class DatosComunidad(TypedDict):
+    nombres: str
+    apellidos: str
+    cedula: int
+    fecha_nacimiento: str
+    patologia: str
+    numero_casa: int
+
+
 class ErrorDeValidacion(Exception):
     motivo: str
     mensaje: str
