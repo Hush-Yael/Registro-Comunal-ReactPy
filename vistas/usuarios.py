@@ -45,15 +45,7 @@ def Usuarios():
             Contenedor(
                 Cabecera(
                     "Lista de usuarios",
-                    html.div(
-                        {"className": "flex flex-col gap-2"},
-                        link(
-                            {"to": "/", "class_name": "btn btn-primario"},
-                            Iconos.FlechaAtras(),
-                            "Ir al formulario",
-                        ),
-                        TerminarSesion(),
-                    ),
+                    TerminarSesion(),
                 ),
                 Tabla(
                     [

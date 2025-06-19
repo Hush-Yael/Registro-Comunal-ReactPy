@@ -244,3 +244,44 @@ class Iconos:
                 }
             ),
         )
+
+    @component
+    def Registros(p: VdomDict = {}):  # type: ignore
+        return html.svg(
+            {
+                "viewBox": "0 0 24 24",
+                "fill": "none",
+                "stroke-width": "2",
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round",
+            },
+            svg.path({"stroke": "none", "d": "M0 0h24v24H0z", "fill": "none"}),
+            svg.path({"d": "M4 12h.01"}),
+            svg.path({"d": "M4 6h.01"}),
+            svg.path({"d": "M4 18h.01"}),
+            svg.path({"d": "M8 18h2"}),
+            svg.path({"d": "M8 12h2"}),
+            svg.path({"d": "M8 6h2"}),
+            svg.path({"d": "M14 6h6"}),
+            svg.path({"d": "M14 12h6"}),
+            svg.path({"d": "M14 18h6"}),
+        )
+
+    @component
+    def Campo(p: VdomDict = {}):  # type: ignore
+        return html.svg(
+            {
+                "viewBox": "0 0 24 24",
+                "fill": "none",
+                "stroke-width": "2",
+                "stroke-linecap": "round",
+                "stroke-linejoin": "round",
+            },
+            svg.path({"stroke": "none", "d": "M0 0h24v24H0z", "fill": "none"}),
+            svg.path({"d": "M12 3a3 3 0 0 0 -3 3v12a3 3 0 0 0 3 3"}),
+            svg.path({"d": "M6 3a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3"}),
+            svg.path({"d": "M13 7h7a1 1 0 0 1 1 1v8a1 1 0 0 1 -1 1h-7"}),
+            svg.path({"d": "M5 7h-1a1 1 0 0 0 -1 1v8a1 1 0 0 0 1 1h1"}),
+            svg.path({"d": "M17 12h.01"}),
+            svg.path({"d": "M13 12h.01"}),
+        )
