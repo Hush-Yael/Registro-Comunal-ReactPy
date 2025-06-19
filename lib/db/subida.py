@@ -1,6 +1,9 @@
 from constantes.db import DatosUsuario, ErrorDeValidacion
 from lib.db.apertura import abrir_db
 
+ERROR_UNICO = "UNIQUE constraint failed"
+ERROR_DE_VERIFICACIÓN = "CHECK constraint failed"
+
 
 async def registrar_usuario(datos: DatosUsuario):
     conn, cursor = await abrir_db()
@@ -28,14 +31,17 @@ async def registrar_usuario(datos: DatosUsuario):
     except Exception as e:
         print(e)
         error = e.args[0]
-        if "UNIQUE constraint failed: usuarios.nombre" in error:
+
+        # el único campo único es el nombre
+        if ERROR_UNICO in error:
             raise ErrorDeValidacion(
                 {
                     "motivo": "nombre-ya-existe",
                     "mensaje": "Ya existe un usuario con ese nombre",
                 }
             )
-        elif "CHECK constraint failed" in error:
+        # errores de integridad de datos
+        elif ERROR_DE_VERIFICACIÓN in error:
             if "nombre" in error:
                 raise ErrorDeValidacion(
                     {
