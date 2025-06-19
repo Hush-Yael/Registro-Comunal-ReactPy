@@ -23,7 +23,7 @@ async def abrir_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nombres TEXT NOT NULL {nombres_check("nombres")},
             apellidos TEXT NOT NULL {nombres_check("apellidos")},
-            cedula INTEGER NOT NULL UNIQUE,
+            cedula INTEGER NOT NULL UNIQUE CHECK(cedula > 0),
             fecha_nacimiento TEXT,
             patologia TEXT,
             numero_casa INTEGER
