@@ -8,7 +8,6 @@ body,
 }
 
 html {
-   background: #000;
    --c1: hsl(0, 0%, 96%);
    --c2: hsl(0, 0%, 92%);
 
@@ -73,7 +72,7 @@ button:disabled {
    color: #fff;
 }
 
-.btn-primario:hover {
+.btn-primario:not([disabled]):hover {
    background: hsl(0, 0%, 25%);
 }
 
@@ -82,7 +81,7 @@ button:disabled {
    background-color: hsl(0, 0%, 90%);
 }
 
-.btn-secundario:hover {
+.btn-secundario:not([disabled]):hover {
    background: hsl(0, 0%, 85%);
 }
 
@@ -91,7 +90,7 @@ button:disabled {
    color: #fff;
 }
 
-.btn-peligro:hover {
+.btn-peligro:not([disabled]):hover {
    background-color: hsl(0, 100%, 40%);
 }
 
