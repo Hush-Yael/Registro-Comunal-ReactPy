@@ -16,7 +16,7 @@ ICONOS = {
 
 
 @component
-def Alerta(texto: str, variante: str, visible: bool):
+def Alerta(texto: str, variante: str, visible: bool = False):
     if visible:
         return html.p(
             {
