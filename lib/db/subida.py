@@ -29,7 +29,6 @@ async def registrar_usuario(datos: DatosUsuario):
 
         await conn.commit()
     except Exception as e:
-        print(e)
         error = e.args[0]
 
         # el único campo único es el nombre
@@ -46,16 +45,17 @@ async def registrar_usuario(datos: DatosUsuario):
                 raise ErrorDeValidacion(
                     {
                         "motivo": "nombre-corto",
-                        "mensaje": "El nombre debe tener al menos 3 caracteres, sin espacios a la izquierda ni a la derecha",
+                        "mensaje": "El nombre debe tener al menos 3 caracteres, sin espacios a los lados",
                     }
                 )
             elif "contraseña" in error:
                 raise ErrorDeValidacion(
                     {
                         "motivo": "contraseña-corta",
-                        "mensaje": "La contraseña debe tener al menos 6 caracteres, sin espacios a la izquierda ni a la derecha",
+                        "mensaje": "La contraseña debe tener al menos 6 caracteres, sin espacios a los lados",
                     }
                 )
+        # error desconocido, no debería pasar
         else:
             raise e
     finally:
