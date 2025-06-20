@@ -35,7 +35,7 @@ async def registrar_usuario(datos: DatosUsuario):
         if ERROR_UNICO in error:
             raise ErrorDeValidacion(
                 {
-                    "motivo": "nombre-ya-existe",
+                    "campo": "nombre",
                     "mensaje": "Ya existe un usuario con ese nombre",
                 }
             )
@@ -44,14 +44,14 @@ async def registrar_usuario(datos: DatosUsuario):
             if "nombre" in error:
                 raise ErrorDeValidacion(
                     {
-                        "motivo": "nombre-corto",
+                        "campo": "nombre",
                         "mensaje": "El nombre debe tener al menos 3 caracteres, sin espacios a los lados",
                     }
                 )
             elif "contraseña" in error:
                 raise ErrorDeValidacion(
                     {
-                        "motivo": "contraseña-corta",
+                        "campo": "contraseña",
                         "mensaje": "La contraseña debe tener al menos 6 caracteres, sin espacios a los lados",
                     }
                 )
@@ -80,7 +80,7 @@ async def iniciar_sesion(datos: DatosUsuario) -> str:
     if len(datos_db) == 0:
         raise ErrorDeValidacion(
             {
-                "motivo": "no-encontrado",
+                "campo": "nombre",
                 "mensaje": "No existe un usuario con los datos ingresados",
             }
         )
@@ -88,7 +88,7 @@ async def iniciar_sesion(datos: DatosUsuario) -> str:
     if datos_db[0] != datos["contraseña"]:
         raise ErrorDeValidacion(
             {
-                "motivo": "contraseña-incorrecta",
+                "campo": "contraseña",
                 "mensaje": "La contraseña ingresada es incorrecta",
             }
         )
@@ -114,7 +114,7 @@ async def verificar_cedula_existente(cedula: int):
     if len(cedula_db) > 0:
         raise ErrorDeValidacion(
             {
-                "motivo": "cedula-ya-existente",
+                "campo": "cedula",
                 "mensaje": "Ya existe un registro con esa cédula",
             }
         )
@@ -143,26 +143,26 @@ async def añadir_datos_comunidad(datos: DatosComunidad):
         if ERROR_UNICO in error:
             raise ErrorDeValidacion(
                 {
-                    "motivo": "cedula-ya-existente",
+                    "campo": "cedula",
                     "mensaje": "Ya existe un registro con esa cédula",
                 }
             )
 
         # errores de integridad de datos
         elif ERROR_DE_VERIFICACIÓN in error:
-            if "nombre" in error or "apellidos" in error:
-                str = "nombres" if "nombre" in error else "apellidos"
+            if "nombres" in error or "apellidos" in error:
+                campo = "nombres" if "nombres" in error else "apellidos"
 
                 raise ErrorDeValidacion(
                     {
-                        "motivo": str + "-cortos",
-                        "mensaje": f"Los {str} deben tener al menos 3 caracteres, sin espacios a los lados",
+                        "campo": campo,
+                        "mensaje": f"Los {campo} deben tener al menos 3 caracteres, sin espacios a los lados",
                     }
                 )
             elif "cedula" in error:
                 raise ErrorDeValidacion(
                     {
-                        "motivo": "cedula-corta",
+                        "campo": "cedula",
                         "mensaje": "La cédula debe ser mayor a 0",
                     }
                 )
