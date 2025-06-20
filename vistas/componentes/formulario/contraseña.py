@@ -1,19 +1,23 @@
-from reactpy import component, event, html, use_state
+from reactpy import component, event, html, use_context, use_state
 from reactpy.types import VdomDict
 
 from vistas.componentes.iconos import Iconos
 from .input import Contenedor, Titulo, Descripcion, MensajeError, _input
 
+from .index import contexto_formulario
+
 
 @component
 def Contraseña(
-    desc: str | None = None,
     props: VdomDict = {},  # type: ignore
-    error: str | None = None,
+    desc: str | None = None,
 ):
+    errores = use_context(contexto_formulario)["errores"]
+    error = errores["contraseña"]
+
     visible, set_visible = use_state(False)
 
-    id = props.get("id")
+    id = props.get("id") or "contraseña"
 
     return Contenedor(
         html.div(
@@ -22,13 +26,14 @@ def Contraseña(
                 {"for": id},
                 Titulo("Contraseña"),
                 _input(
+                    "contraseña",
+                    id,
+                    desc,
+                    error,
                     {
                         **props,
                         "type": "password" if not visible else "text",
                     },
-                    id,
-                    desc,
-                    error,
                 ),
             ),
             html.button(
