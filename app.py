@@ -63,6 +63,8 @@ configure(
             ),
             # Importar la hoja de estilos
             html.link({"rel": "stylesheet", "href": "/static/css/index.css"}),
+            # Se añade la funcionalidad de los modales
+            html.script({"src": "/static/js/modales.js"}),
         )
     ),
 )

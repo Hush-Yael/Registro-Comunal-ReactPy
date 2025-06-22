@@ -1,38 +1,26 @@
 from typing import Any, Callable
-from reactpy import component, html, event
-from reactpy.types import VdomChildren
+from reactpy import component, html
+from reactpy.types import VdomChildren, VdomAttributes
 
 
 @component
 def Modal(
     *children: VdomChildren,
-    abierto: bool,
-    set_abierto: Callable[[bool], None] | None = None,
+    props: VdomAttributes = {},
     cerrarse: Callable = lambda: None,
     confirmar: Any,
+    cancelar_txt: str = "Cancelar",
     confirmar_txt: str = "Confirmar",
 ):
-    @event
-    def cerrar(evento):
-        if evento["target"]["tagName"] == "DIALOG":
-            if set_abierto is not None:
-                set_abierto(False)
-            cerrarse()
-
-    @event
-    async def confirmacion(_):
-        await confirmar(_)
-        if set_abierto is not None:
-            set_abierto(False)
-
     return html.dialog(
         {
-            "open": abierto,
-            "className": "not-open:hidden fixed z-10 inset-0 flex items-center justify-center size-full bg-[#0002] open:animate-[aparecer_0.2s_ease-in-out]",
-            "on_click": cerrar,
+            **props,
+            "className": "m-auto bg-white shadow-xl rounded-md open:animate-[aparecer_0.2s_ease-in-out] backdrop:bg-[#0002] open:backdrop:animate-[aparecer_0.2s_ease-in-out]",
         },
         html.div(
-            {"className": "m-auto p-4 rounded-md  bg-white shadow-xl"},
+            {
+                "className": "p-4",
+            },
             html.div(
                 {"className": "flex flex-col gap-6"},
                 *children,
@@ -40,8 +28,17 @@ def Modal(
                     {"className": "flex justify-end gap-2"},
                     html.button(
                         {
+                            "className": "btn btn-secundario",
+                            "data-modal-btn": "",
+                            "on_click": cerrarse,
+                        },
+                        cancelar_txt,
+                    ),
+                    html.button(
+                        {
                             "className": "btn btn-primario",
-                            "on_click": confirmacion,
+                            "data-modal-btn": "",
+                            "on_click": confirmar,
                         },
                         confirmar_txt,
                     ),

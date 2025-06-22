@@ -1,19 +1,10 @@
-from reactpy import (
-    component,
-    html,
-    use_context,
-    use_effect,
-    use_state,
-    use_ref,
-)
-from reactpy_router import link
+from reactpy import component, html, use_context, use_effect, use_state, use_ref, Ref
 from typing import Callable
 
 from lib.db.obtencion import obtener_usuarios
 from lib.db.modificacion import cambiar_rol, eliminar_usuario
 from constantes.db import Sesion
 from contexto.sesion import contexto_sesion
-from contexto.eliminar_usuario import contexto_eliminar_usuario
 
 from .componentes.terminar_sesion import TerminarSesion
 from .componentes.carga import Carga
@@ -26,7 +17,6 @@ from .componentes.modal import Modal
 
 @component
 def Usuarios():
-    abierto, set_abierto = use_state(False)
     usuarios, set_usuarios = use_state([])
     usuario_a_eliminar = use_ref("")
 
@@ -35,28 +25,26 @@ def Usuarios():
         await eliminar_usuario(nombre)
         set_usuarios(
             lambda anteriores: list(
-                filter(lambda u: u["usuario"] != nombre, anteriores)
+                filter(lambda usuarios: usuarios["usuario"] != nombre, anteriores)
             )
         )
         usuario_a_eliminar.current = ""
 
-    return contexto_eliminar_usuario(
-        Main(
-            Contenedor(
-                Cabecera(
-                    "Lista de usuarios",
-                    TerminarSesion(),
-                ),
-                Tabla(
-                    [
-                        {"label": "#", "tamaño": 3},
-                        {"label": "Usuario", "tamaño": 25},
-                        {"label": "Rol", "tamaño": 5},
-                        {"label": "Acciones", "tamaño": 15, "pos": "right"},
-                    ],
-                    Datos(usuarios, set_usuarios),
-                ),
-            )
+    return Main(
+        Contenedor(
+            Cabecera(
+                "Lista de usuarios",
+                TerminarSesion(),
+            ),
+            Tabla(
+                [
+                    {"label": "#", "tamaño": 3},
+                    {"label": "Usuario", "tamaño": 25},
+                    {"label": "Rol", "tamaño": 5},
+                    {"label": "Acciones", "tamaño": 15, "pos": "right"},
+                ],
+                Datos(usuario_a_eliminar, usuarios, set_usuarios),
+            ),
         ),
         Modal(
             html.div(
@@ -67,20 +55,15 @@ def Usuarios():
                     "¿Realmente quieres eliminar el usuario?",
                 ),
             ),
-            abierto=abierto,
-            set_abierto=set_abierto,
+            props={"id": "eliminar-usuario"},
             confirmar=eliminar,
             confirmar_txt="Eliminar",
         ),
-        value={
-            "abierto": abierto,
-            "set_abierto": set_abierto,
-            "usuario": usuario_a_eliminar,
-        },
     )
 
 
 def Datos(
+    usuario_a_eliminar: Ref[str],
     usuarios: list[Sesion] = [],
     set_usuarios: Callable[[Callable[[list[Sesion]], list[Sesion]]], None] = None,  # type: ignore
 ):
@@ -131,7 +114,7 @@ def Datos(
             ),
             html.td(
                 {"className": "p-2 text-right"},
-                BtnEliminar(usuarios[i]["usuario"])
+                BtnEliminar(usuario_a_eliminar, usuarios[i]["usuario"])
                 if not es_usuario_actual(usuarios[i]["usuario"])
                 else html.i(
                     {
@@ -160,25 +143,21 @@ def Roles(func: Callable, datos: Sesion):
     )
 
 
-def BtnEliminar(usuario: str):
-    contexto = use_context(contexto_eliminar_usuario)
-    set_abierto = contexto["set_abierto"]
-    usuario_a_eliminar = contexto["usuario"]
-
+def BtnEliminar(usuario_a_eliminar: Ref[str], usuario: str):
     sesion = use_context(contexto_sesion)["sesion"]
 
-    async def eliminar(_):
+    async def preparar_eliminar(_):
         if sesion["rol"] != "admin":
             return
 
-        set_abierto(True)
         usuario_a_eliminar.current = usuario
 
     return html.button(
         {
             "className": "btn btn-peligro ml-auto px-1.25!",
-            "on_click": eliminar,
             "disabled": sesion["rol"] != "admin",
+            "data-modal": "eliminar-usuario",
+            "on_click": preparar_eliminar,
         },
         Iconos.Eliminar(),
     )
