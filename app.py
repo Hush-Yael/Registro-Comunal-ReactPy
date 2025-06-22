@@ -5,11 +5,12 @@ from reactpy_router import browser_router, route, navigate
 from contexto.sesion import contexto_sesion
 
 from constantes.db import Sesion
-from vistas.formulario import Formulario
+from vistas.registro_comunidad import RegistroComunidad
 from vistas._404 import NoEncontrado
 from vistas.login import Login
-from vistas.registro import Registro
-from vistas.usuarios import Usuarios
+from vistas.registro_usuarios import RegistroUsuarios
+from vistas.registros_comunidad import RegistrosComunidad
+from vistas.lista_usuarios import Usuarios
 
 from flaskwebgui import FlaskUI  # type: ignore
 
@@ -26,7 +27,7 @@ def root():
     if not sesion["usuario"]:
         return contexto_sesion(
             browser_router(
-                route("/registro", Registro()),
+                route("/registro", RegistroUsuarios()),
                 route("{404:any}", Login()),
             ),
             value={"sesion": sesion, "set_sesion": set_sesion},
@@ -35,11 +36,11 @@ def root():
     # si ha iniciado sesión, se activan todas las rutas de la aplicación, menos el login
     return contexto_sesion(
         browser_router(
-            route("/", Formulario()),
+            route("/", RegistroComunidad()),
             route("/login", navigate("/", replace=True)),
             route("/registro", navigate("/", replace=True)),
             route("/usuarios", Usuarios()),
-            route("/registros", Registros()),
+            route("/registros", RegistrosComunidad()),
             route("{404:any}", NoEncontrado()),
         ),
         value={"sesion": sesion, "set_sesion": set_sesion},

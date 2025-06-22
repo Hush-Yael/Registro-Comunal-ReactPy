@@ -35,7 +35,7 @@ def DatosIniciales():
 
 
 @component
-def Formulario():
+def RegistroComunidad():
     async def subir(contexto: ContextoFormulario):
         datos, set_datos, set_estado, set_errores = (
             contexto["datos"],

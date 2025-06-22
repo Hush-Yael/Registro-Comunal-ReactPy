@@ -23,7 +23,7 @@ from .componentes.contenedor import Cabecera, Contenedor
 
 
 @component
-def Registro():
+def RegistroUsuarios():
     async def subir(contexto: ContextoFormulario):
         datos, set_datos, set_estado, set_errores = (
             contexto["datos"],
