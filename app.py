@@ -73,4 +73,4 @@ if __name__ == "__main__":
     # Para visualizar en el navegador:
     # app.run(debug=True)
     # Para visualizar en la webview:
-    FlaskUI(app=app, server="flask", width=800, height=700).run()
+    FlaskUI(app=app, server="flask", fullscreen=True).run()
