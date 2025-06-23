@@ -57,6 +57,7 @@ docs/_build/
 
 # SQLite databases
 *.db
+db/*
 
 # things to be discarded or reused
 draft/
