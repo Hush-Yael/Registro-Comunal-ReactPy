@@ -6,8 +6,11 @@ def nombres_check(nombre_columna: str):
     return f"CHECK(length(trim({nombre_columna})) >= {NOMBRE_MÍNIMO})"
 
 
-async def abrir_db():
+async def abrir_db(devolver_diccionario: bool = False):
     conn = await aiosqlite.connect("db/comunidad.db")
+    if devolver_diccionario:
+        conn.row_factory = aiosqlite.Row
+
     cursor = await conn.cursor()
 
     await cursor.execute(f"""--sql
