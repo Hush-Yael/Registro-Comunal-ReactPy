@@ -43,6 +43,7 @@ def Usuarios():
                     {"label": "Rol", "tamaño": 5},
                     {"label": "Acciones", "tamaño": 15, "pos": "right"},
                 ],
+                {"className": "mt-8 max-h-[60vh]"},
                 Datos(usuario_a_eliminar, usuarios, set_usuarios),
             ),
         ),

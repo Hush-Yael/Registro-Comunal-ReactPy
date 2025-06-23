@@ -10,10 +10,10 @@ class Thead(TypedDict):
 
 
 @component
-def Tabla(cabeceras: list[Thead], *children: VdomChildren):
+def Tabla(cabeceras: list[Thead], props: VdomAttributes = {}, *children: VdomChildren):
     return html.div(
         # wrapper de la tabla para poder hacer scroll
-        {"className": "max-h-[400px] mt-8 overflow-y-auto"},
+        {"className": f"{props.get('className', '')} overflow-y-auto"},
         html.table(
             {
                 "className": "w-full table-auto border-tools-table-outline rounded-md border-neutral-500 text-sm"
