@@ -1,5 +1,5 @@
 from reactpy import component, event, html, use_context, use_state
-from reactpy.types import VdomDict
+from reactpy.types import VdomAttributes
 
 from vistas.componentes.iconos import Iconos
 from .input import Contenedor, Titulo, Descripcion, MensajeError, _input
@@ -9,7 +9,7 @@ from .index import contexto_formulario
 
 @component
 def Contraseña(
-    props: VdomDict = {},  # type: ignore
+    props: VdomAttributes = {},
     desc: str | None = None,
 ):
     errores = use_context(contexto_formulario)["errores"]

@@ -1,9 +1,9 @@
 from reactpy import component, html, svg
-from reactpy.types import VdomDict
+from reactpy.types import VdomAttributes
 
 
 @component
-def Carga(p: VdomDict = {}):  # type: ignore
+def Carga(p: VdomAttributes = {}):
     return html.svg(
         {
             **p,

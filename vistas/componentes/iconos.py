@@ -1,10 +1,10 @@
 from reactpy import component, html, svg
-from reactpy.types import VdomDict
+from reactpy.types import VdomAttributes
 
 
 class Iconos:
     @component
-    def Casa(p: VdomDict = {}):  # type: ignore
+    def Casa(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {
                 **p,
@@ -19,7 +19,7 @@ class Iconos:
         )
 
     @component
-    def Personas(p: VdomDict = {}):  # type: ignore
+    def Personas(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {**p, "viewBox": "0 0 96 96"},
             svg.circle(
@@ -55,7 +55,7 @@ class Iconos:
         )
 
     @component
-    def N404(p: VdomDict = {}):  # type: ignore
+    def N404(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {**p, "viewBox": "0 0 32 32"},
             svg.g(
@@ -111,7 +111,7 @@ class Iconos:
         )
 
     @component
-    def Buscar(p: VdomDict = {}):  # type: ignore
+    def Buscar(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {
                 "xmlns": "http://www.w3.org/2000/svg",
@@ -126,7 +126,7 @@ class Iconos:
         )
 
     @component
-    def Eliminar(p: VdomDict = {}):  # type: ignore
+    def Eliminar(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {
                 "xmlns": "http://www.w3.org/2000/svg",
@@ -144,7 +144,7 @@ class Iconos:
         )
 
     @component
-    def Añadir(p: VdomDict = {}):  # type: ignore
+    def Añadir(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {"viewBox": "0 0 24 24"},
             svg.path({"d": "M0 0h24v24H0z", "fill": "none"}),
@@ -156,7 +156,7 @@ class Iconos:
         )
 
     @component
-    def Ver(p: VdomDict = {}):  # type: ignore
+    def Ver(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {
                 **p,
@@ -175,7 +175,7 @@ class Iconos:
         )
 
     @component
-    def Ocultar(p: VdomDict = {}):  # type: ignore
+    def Ocultar(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {
                 **p,
@@ -193,7 +193,7 @@ class Iconos:
         )
 
     @component
-    def FlechaAtras(p: VdomDict = {}):  # type: ignore
+    def FlechaAtras(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {
                 **p,
@@ -208,7 +208,7 @@ class Iconos:
         )
 
     @component
-    def Salir(p: VdomDict = {}):  # type: ignore
+    def Salir(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {
                 **p,
@@ -230,7 +230,7 @@ class Iconos:
         )
 
     @component
-    def Check(p: VdomDict = {}):  # type: ignore
+    def Check(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {
                 **p,
@@ -246,7 +246,7 @@ class Iconos:
         )
 
     @component
-    def Registros(p: VdomDict = {}):  # type: ignore
+    def Registros(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {
                 "viewBox": "0 0 24 24",
@@ -268,7 +268,7 @@ class Iconos:
         )
 
     @component
-    def Campo(p: VdomDict = {}):  # type: ignore
+    def Campo(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {
                 "viewBox": "0 0 24 24",
@@ -287,7 +287,7 @@ class Iconos:
         )
 
     @component
-    def Borrar(p: VdomDict = {}):  # type: ignore
+    def Borrar(p: VdomAttributes = {}):  # type: ignore
         return html.svg(
             {
                 "viewBox": "0 0 24 24",

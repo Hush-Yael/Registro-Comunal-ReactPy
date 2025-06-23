@@ -1,5 +1,5 @@
 from reactpy import component, html
-from reactpy.types import VdomChildren, VdomDict
+from reactpy.types import VdomChildren, VdomAttributes
 from typing import TypedDict
 
 
@@ -41,7 +41,7 @@ def Tabla(cabeceras: list[Thead], *children: VdomChildren):
 
 @component
 def Cabecera(
-    props: VdomDict = {},  # type: ignore
+    props: VdomAttributes = {},
     *children: VdomChildren,
 ):
     return html.th(
@@ -54,7 +54,7 @@ def Cabecera(
 
 
 @component
-def Fila(*children: VdomChildren, props: VdomDict = {}):  # type: ignore
+def Fila(*children: VdomChildren, props: VdomAttributes = {}):  # type: ignore
     return html.tr(
         {
             "className": f"odd:bg-neutral-100 border-b border-neutral-200 {props.get('className', '')}",
